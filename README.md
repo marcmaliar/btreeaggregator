@@ -1,1 +1,1 @@
-Marc Maliar Database project
+B Tree Aggregator Project -- Marc Maliar
