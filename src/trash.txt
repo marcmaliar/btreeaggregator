@@ -1,0 +1,9 @@
+uint32_t nextID() {
+    if (first) {first = false; second = true; return 0; }
+    if (second) {second = false; left = 30; return 1 << 31; }
+    uint32_t id = (1 << (left)) + (counter << (left+1));
+    counter += 1;
+    if (counter == (1 << (31 - left))) {left -= 1; counter = 0;}
+    if (left == -1) {first = true; } 
+    return id;
+}

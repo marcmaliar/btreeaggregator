@@ -1,0 +1,26 @@
+else if (clientConfig.runtype == packetLimit) {
+
+        int packets = clientConfig.packetLimit;
+        Packet* p = createPacket();;
+        while (packets) {
+            
+            if (diffInNs(clientConfig.start, Clock::now())-packetsProcessed*clientConfig.nsInterval > clientConfig.nsInterval && 
+                clientConfig.q->try_enqueue(*p)) { 
+                delete p;
+                p = createPacket();
+                packetsProcessed++;
+                packets--;
+            }
+            else { std::this_thread::yield(); }
+        }
+    }
+
+else if (serverConfig.runtype == packetLimit) {
+        int packets = serverConfig.packetLimit;
+        Packet p;
+        while (packets) {
+            if (serverConfig.q->try_dequeue(p)) { packets--; continue; }
+            else { std::this_thread::yield(); }
+        }
+        p_serverConfig->end = Clock::now();
+    }
